@@ -26,7 +26,7 @@ Menu options for arduino:
 * set temperature
 * fan speed
 * power (on/off) 
-* control mode (heat/ac/auto)
+* control mode (heat/ac/auto/weather mode)
 
 
 Weather Tracking Specifications
@@ -46,3 +46,6 @@ Also being considered is the development of an Arduino based weather station. Fo
 * Soil Humidity sensor
 * Breadboard or Custom ProtoShield
 * Jumper Wire
+
+
+It has been decided that the raspberry pi receiving the weather information will send that information to the base unit arduino when it is put into weather mode and the base unit will adjust the indide weather depending on what the outside weather is like.  Additionally, the team has decided to add an additional arduino with an ethernet shield to display current information about the weather and thermostat on a website housed on the arduino.  
