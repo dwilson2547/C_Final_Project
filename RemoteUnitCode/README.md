@@ -1,0 +1,1 @@
+This folder contains the arduino project file for the remote arduino unit.  Details about the code will be added to this document as the project is completed

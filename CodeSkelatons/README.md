@@ -1,0 +1,1 @@
+This folder contains basic code skelatons for the project.  Some of these will be written is pure ANSI C code. 

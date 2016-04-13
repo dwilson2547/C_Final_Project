@@ -1,0 +1,1 @@
+This folder contains the arduino project file for the base unit, details of how the code is laid out will be added to this document as the project is completed
