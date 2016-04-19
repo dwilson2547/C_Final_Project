@@ -9,6 +9,7 @@ int currentMenuItem = 0;
 int lastState = 0;
 int pos = 90; 
 Servo myservo;
+int temp = 72; 
 
 void setup() {
    //Set the characters and column numbers.
@@ -22,7 +23,26 @@ void loop() {
   //Call the main menu.
   mainMenu();
 }
- 
+
+int checkButton() {
+  int x = analogRead(0); 
+  int state = 0; 
+  if (x < 100) {
+    //Right
+  } else if (x < 200) {
+   //Up
+    state = 1;
+  } else if (x < 400){
+   //Down
+    state = 2;
+  } else if (x < 600){
+    //Left
+  } else if (x < 800){
+    //Select
+    state = 3;
+  }
+}
+
 void mainMenu() {
   //State = 0 every loop cycle.
   int state = 0;
@@ -34,6 +54,7 @@ void mainMenu() {
   //Check analog values from LCD Keypad Shield
   if (x < 100) {
     //Right
+    state = 4; 
   } else if (x < 200) {
    //Up
     state = 1;
@@ -42,6 +63,7 @@ void mainMenu() {
     state = 2;
   } else if (x < 600){
     //Left
+    state = 5; 
   } else if (x < 800){
     //Select
     state = 3;
@@ -57,6 +79,7 @@ void mainMenu() {
       if (state == 1) {
          //If Up
           clearPrintTitle();
+          currentMenuItem = 1; 
           pos += 5;
           lcd.print(pos);
           myservo.write(pos);
@@ -64,17 +87,39 @@ void mainMenu() {
       } else if (state == 2) {
          //If Down
           clearPrintTitle();
+          currentMenuItem = 2; 
           pos -= 5;
           lcd.print(pos);
           myservo.write(pos);
       } else if (state == 3) {
-         //If Selected 
+         //If Selected
+         if (currentMenuItem == 1) {
+          changeTemp();
+         }
       }
       //Save the last State to compare.
       lastState = state;
    } 
    //Small delay
   delay(5);
+}
+
+void changeTemp() {
+  int i = 0;
+  int j = 0; 
+  while (i == 0) {
+    j = checkButton(); 
+    if (j == 4) {
+      temp += 1; 
+    }
+    else if (j == 5) {
+      temp -= 1; 
+    }
+    else if (j == 3) {
+      i = 1;
+      return;
+    }
+  }
 }
  
 //Display Menu Option based on Index.
