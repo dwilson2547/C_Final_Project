@@ -13,6 +13,7 @@ int powerOn;
 int powerOff; 
 Servo srvPower; 
 Servo srvTemp;
+int mode; 
 
 void setup() {
   // initialize 2.4 GHZ module
@@ -22,6 +23,14 @@ void setup() {
 }
 
 void loop(){
+  switch (mode) {
+    case 1 : 
+      checkHeat(); 
+      break;
+    case 2 : 
+      checkCool(); 
+      break; 
+  }
   receiveData(); 
   checkTemp(); 
 }
@@ -46,6 +55,24 @@ void checkTemp() {
   }
   else {
     // turn off
+    power(0); 
+  }
+}
+void checkHeat() {
+  if (currentTemp < setP - 2) {
+    srvTemp.write(heat); 
+    power(1);
+  }
+  else {
+    power(0); 
+  }
+}
+void checkCool() {
+  if (currentTemp > setP + 2) {
+    srvTemp.write(cool); 
+    power(1); 
+  }
+  else {
     power(0); 
   }
 }

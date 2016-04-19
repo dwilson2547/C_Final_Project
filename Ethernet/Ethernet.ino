@@ -19,6 +19,7 @@
 
 #include <SPI.h>
 #include <Ethernet.h>
+#include <Wire.h>
 
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
@@ -36,7 +37,8 @@ void setup() {
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
 
-
+  Wire.begin(8); 
+  Wire.onReceive(method()); 
   // start the Ethernet connection and the server:
   Ethernet.begin(mac, ip);
   server.begin();
@@ -44,6 +46,9 @@ void setup() {
   Serial.println(Ethernet.localIP());
 }
 
+void method() {
+  Serial.println("it worked"); 
+}
 
 void loop() {
   // listen for incoming clients
