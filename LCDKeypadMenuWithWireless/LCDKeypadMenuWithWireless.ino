@@ -28,19 +28,19 @@ int currentTemp;
 // TEMP VARS
 int temp = 72;
 // FAN VARS
-int fanLOW = 1; 
-int fanMED = 2; 
-int fanHI = 3; 
+const int fanLOW = 1; 
+const int fanMED = 2; 
+const int fanHI = 3; 
 int fan = fanLOW; 
 // POWER VARS
-int powerON = 1; 
-int powerOFF = 0; 
+const int powerON = 1; 
+const int powerOFF = 0; 
 int power = powerOFF;
 // MODE VARS
-int mHEAT = 1; 
-int mCOOL = 2; 
-int mAUTO = 3; 
-int mWEATHER = 4; 
+const int mHEAT = 1; 
+const int mCOOL = 2; 
+const int mAUTO = 3; 
+const int mWEATHER = 4; 
 int mode = mAUTO; 
 
 void setup() {
@@ -65,7 +65,7 @@ void setup() {
 void loop() {
   //Call the main menu.
   mainMenu();
-  transmit(); 
+  transmit();
 }
 void transmit() {
   radio.stopListening();
