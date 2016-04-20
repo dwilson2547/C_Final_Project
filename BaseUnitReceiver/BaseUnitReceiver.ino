@@ -28,6 +28,10 @@ void setup() {
 }
 
 void loop() {
+  receive(); 
+}
+
+void receive() {
   if (radio.available())
   {
     Serial.println("Radio available"); 
@@ -49,3 +53,4 @@ void loop() {
   }
   delay(500); 
 }
+
