@@ -63,7 +63,7 @@ void setup() {
 }
  
 void loop() {
-  //Call the main menu.
+  updateTemp(); 
   mainMenu();
   transmit();
 }
@@ -263,7 +263,15 @@ void selectMenu(int x) {
       break;
   }
 }
-// DISPLAY METHoDS
+// UPDATE CURRENT TEMP
+void updateTemp() {
+  int currentTemp1 = (5.0 * analogRead(A1)*100.0)/1024;
+  int currentTemp2 = (5.0 * analogRead(A2)*100.0)/1024; 
+  currentTemp = (5.0 * analogRead(A2)*100.0)/1024;
+  Serial.println(currentTemp); 
+  currentTemp = (currentTemp * (9.0/5.0) + 32);
+}
+// DISPLAY METHODS
 void showTemp(int n) {
   int tC = (currentTemp - 32) * 5.0/9.0; 
   lcd.clear(); 
@@ -337,7 +345,7 @@ void showMode() {
 void showCurrentTemp() {
   int currentTemp1 = (5.0 * analogRead(A1)*100.0)/1024;
   int currentTemp2 = (5.0 * analogRead(A2)*100.0)/1024; 
-  currentTemp = (currentTemp1 + currentTemp2) / 2.0;
+  currentTemp = (5.0 * analogRead(A2)*100.0)/1024;
   currentTemp = (currentTemp * (9.0/5.0) + 32); 
   lcd.clear(); 
   lcd.setCursor(0,0); 
