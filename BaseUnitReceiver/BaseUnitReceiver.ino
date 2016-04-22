@@ -1,6 +1,7 @@
 #include <SPI.h>
 #include "RF24.h"
 #include <Servo.h>
+#include <Wire.h>
 
 RF24 radio(9,10); 
 byte addresses[][6] = {"1Node","2Node"};
@@ -48,6 +49,8 @@ void setup() {
   tempServo.attach(3); 
   powerServo.attach(5); 
   fanServo.attach(6);
+
+  Wire.begin(); 
 }
 void loop() {
   receiveWireless();
@@ -60,7 +63,14 @@ void loop() {
   if (oldData.fan != txData.fan) {
     changeFan(); 
   }
-  oldData = txData; 
+  oldData = txData;
+  i2cTransmit();  
+}
+void i2cTransmit() {
+  Serial.println("Sending"); 
+  Wire.beginTransmission(8); 
+  Wire.write(txData.currentTemp); 
+  Wire.endTransmission(); 
 }
 void changeFan() {
   switch (txData.fan) {

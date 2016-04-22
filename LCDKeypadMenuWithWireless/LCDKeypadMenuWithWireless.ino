@@ -265,21 +265,21 @@ void selectMenu(int x) {
 }
 // UPDATE CURRENT TEMP
 void updateTemp() {
-  int currentTemp1 = (5.0 * analogRead(A1)*100.0)/1024;
-  int currentTemp2 = (5.0 * analogRead(A2)*100.0)/1024; 
-  currentTemp = (5.0 * analogRead(A2)*100.0)/1024;
+  float tempT = (5.0 * analogRead(A1)*100.0)/1024;
+  Serial.print("Temp: ");
+  tempT = (tempT * (9.0/5.0) + 32);
+  currentTemp = tempT; 
   Serial.println(currentTemp); 
-  currentTemp = (currentTemp * (9.0/5.0) + 32);
 }
 // DISPLAY METHODS
 void showTemp(int n) {
-  int tC = (currentTemp - 32) * 5.0/9.0; 
-  lcd.clear(); 
-  lcd.setCursor(0,0); 
+  int tC = (currentTemp - 32) * 5.0/9.0;
+  lcd.clear();
+  lcd.setCursor(0,0);
   if (n == 0) {
     lcd.print("Fahrenheit");
     lcd.setCursor(0,1);
-    lcd.print(currentTemp); 
+    lcd.print(currentTemp);
   }
   else {
     lcd.print("Celcius");
