@@ -37,7 +37,7 @@ void setup() {
 
 void method(int n) {
   Serial.println("it worked"); 
-  int x = Wire.read(); 
+  int x = Wire.read();
   Serial.println(x); 
 }
 

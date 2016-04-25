@@ -32,7 +32,7 @@ int receivedTemp;
 Servo tempServo; 
 Servo powerServo; 
 Servo fanServo; 
-
+char[] = "<li>" + txData.currentTemp + "</li><li>"
 void setup() {
   Serial.begin(115200); 
 
