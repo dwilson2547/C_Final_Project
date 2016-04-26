@@ -32,7 +32,7 @@ int receivedTemp;
 Servo tempServo; 
 Servo powerServo; 
 Servo fanServo; 
-char[] = "<li>" + txData.currentTemp + "</li><li>"
+
 void setup() {
   Serial.begin(115200); 
 
@@ -55,6 +55,7 @@ void setup() {
 void loop() {
   receiveWireless();
   if (txData.power == powerON){
+    Serial.println("Mode on"); 
     setMode();
   }
   if (oldData.power != txData.power) {
@@ -67,7 +68,7 @@ void loop() {
   i2cTransmit();  
 }
 void i2cTransmit() {
-  Serial.println("Sending"); 
+  //Serial.println("Sending"); 
   Wire.beginTransmission(8); 
   Wire.write(txData.currentTemp); 
   Wire.endTransmission(); 
@@ -98,15 +99,31 @@ void changePower() {
 void setMode() {
   switch(txData.mode) {
     case 1:
-      heatMode(); 
+    Serial.println("mode 1"); 
+      if (txData.currentTemp < txData.setTemp + 3) {
+        setPower(powerON); 
+        setTemp(tempHI); 
+      }
+      else {
+       setPower(powerOFF); 
+      } 
       break;
     case 2:
-      coolMode();
+    Serial.println("Mode 2"); 
+      if (txData.currentTemp > txData.setTemp - 3) {
+        powerServo.write(powerON);
+        tempServo.write(tempLOW);
+     }
+      else {
+        powerServo.write(powerOFF); 
+      }
       break;
     case 3:
+      Serial.println("Mode 3");
       autoMode(); 
       break;
     case 4:
+      Serial.println("Mode 4"); 
       weatherMode();
       break;
   }
@@ -122,8 +139,8 @@ void heatMode() {
 }
 void coolMode() {
   if (txData.currentTemp > txData.setTemp - 3) {
-    setPower(powerON); 
-    setTemp(tempLOW); 
+    setPower(powerON);
+    setTemp(tempLOW);
   }
   else {
     setPower(powerOFF); 
