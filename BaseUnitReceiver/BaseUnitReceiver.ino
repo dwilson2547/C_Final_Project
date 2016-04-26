@@ -17,24 +17,24 @@ struct dataStruct {
 
 // VARS
 // FAN VARS
-const int fanLOW = 1; 
-const int fanMED = 2; 
-const int fanHI = 3; 
+const int fanLOW = 165; 
+const int fanMED = 130; 
+const int fanHI = 85; 
 // POWER VARS
-const int powerON = 1; 
-const int powerOFF = 2; 
+const int powerON = 125; 
+const int powerOFF = 75; 
 // TEMP VARS
-const int tempHI = 1; 
-const int tempLOW = 2; 
+const int tempHI = 10; 
+const int tempLOW = 60; 
 // RECEIVED TEMP 
-int receivedTemp; 
+int receivedTemp;
 // SERVOS
 Servo tempServo; 
 Servo powerServo; 
 Servo fanServo; 
 
 void setup() {
-  Serial.begin(115200); 
+  Serial.begin(9600); 
 
   radio.begin(); 
   radio.setPALevel(RF24_PA_LOW);
@@ -47,7 +47,7 @@ void setup() {
   radio.powerUp();
 
   tempServo.attach(3); 
-  powerServo.attach(5); 
+  powerServo.attach(5);  
   fanServo.attach(6);
 
   Wire.begin(); 
@@ -66,6 +66,13 @@ void loop() {
   }
   oldData = txData;
   i2cTransmit();  
+  serialRead(); 
+}
+int receive; 
+void serialRead() {
+  while (Serial.available() > 0) {
+    receivedTemp = (int)Serial.read(); 
+  }
 }
 void i2cTransmit() {
   //Serial.println("Sending"); 
@@ -89,11 +96,11 @@ void changeFan() {
 void changePower() {
   if (txData.power == 0) {
     setPower(powerOFF);
-    Serial.println("Power off"); 
+    //Serial.println("Power off"); 
   }
   else {
     setPower(powerON);
-    Serial.println("Power on"); 
+    //Serial.println("Power on"); 
   }
 }
 void setMode() {
