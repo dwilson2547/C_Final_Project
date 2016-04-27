@@ -77,10 +77,10 @@ void transmit() {
   txData.power = power; 
   txData.mode = mode;
 
-  Serial.println("Now Sending"); 
+  //Serial.println("Now Sending"); 
 
   if (!radio.write(&txData, sizeof(txData))) {
-    Serial.println("Transmit failed"); 
+    //Serial.println("Transmit failed"); 
   }
 }
 int checkButton() {

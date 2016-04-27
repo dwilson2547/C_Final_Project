@@ -46,6 +46,10 @@ void setup() {
   radio.startListening();
   radio.powerUp();
 
+  pinMode(6, OUTPUT); 
+  pinMode(5, OUTPUT);
+  pinMode(3, OUTPUT);
+
   tempServo.attach(3); 
   powerServo.attach(5);  
   fanServo.attach(6);
@@ -54,20 +58,20 @@ void setup() {
 }
 void loop() {
   receiveWireless();
-  if (txData.power == powerON){
-    Serial.println("Mode on"); 
+  if (txData.power == 1){
     setMode();
   }
   if (oldData.power != txData.power) {
     changePower();
   }
-  if (oldData.fan != txData.fan) {
+  //if (oldData.fan != txData.fan) {
     changeFan(); 
-  }
+ // }
   oldData = txData;
   i2cTransmit();  
   serialRead(); 
 }
+
 int receive; 
 void serialRead() {
   while (Serial.available() > 0) {
@@ -77,19 +81,24 @@ void serialRead() {
 void i2cTransmit() {
   //Serial.println("Sending"); 
   Wire.beginTransmission(8); 
-  Wire.write(txData.currentTemp); 
+  Wire.write(txData.currentTemp);
+  Wire.write(",");
+  Wire.write(txData.setTemp); 
   Wire.endTransmission(); 
 }
 void changeFan() {
   switch (txData.fan) {
     case 1:
-      setFan(fanLOW); 
+      //Serial.println("Fan 1"); 
+      fanServo.write(fanLOW); 
       break;
     case 2:
-      setFan(fanMED);
+      //Serial.println("Fan 2"); 
+      fanServo.write(fanMED);
       break;
     case 3: 
-      setFan(fanHI); 
+      //Serial.println("Fan 3"); 
+      fanServo.write(fanHI); 
       break;
   }
 }
@@ -104,34 +113,57 @@ void changePower() {
   }
 }
 void setMode() {
+  //Serial.println("SetMode");
   switch(txData.mode) {
     case 1:
-    Serial.println("mode 1"); 
+      //Serial.println("Mode 1"); 
       if (txData.currentTemp < txData.setTemp + 3) {
         setPower(powerON); 
         setTemp(tempHI); 
       }
       else {
-       setPower(powerOFF); 
-      } 
+        setPower(powerOFF); 
+      }
       break;
     case 2:
-    Serial.println("Mode 2"); 
+      //Serial.println("Mode 2"); 
       if (txData.currentTemp > txData.setTemp - 3) {
-        powerServo.write(powerON);
-        tempServo.write(tempLOW);
-     }
+        setPower(powerON); 
+        setTemp(tempLOW); 
+       }
       else {
-        powerServo.write(powerOFF); 
+        setPower(powerOFF); 
       }
       break;
     case 3:
-      Serial.println("Mode 3");
-      autoMode(); 
+      //Serial.println("Mode 3"); 
+      if (txData.currentTemp > txData.setTemp + 3) {
+        setPower(powerON); 
+        setTemp(tempLOW); 
+      }
+      else if (txData.currentTemp < txData.setTemp - 3) {
+        setPower(powerON); 
+        setTemp(tempHI); 
+      }
+      else 
+      {
+        setPower(powerOFF); 
+      } 
       break;
     case 4:
-      Serial.println("Mode 4"); 
-      weatherMode();
+      //Serial.println("Mode 4"); 
+      if (txData.currentTemp < receivedTemp + 3) {
+        setPower(powerON); 
+        setTemp(tempHI); 
+      }
+      else if (txData.currentTemp > receivedTemp - 3) {
+        setPower(powerON); 
+        setTemp(tempLOW); 
+      }
+      else 
+      {
+        setPower(powerOFF); 
+      }
       break;
   }
 }
@@ -146,8 +178,8 @@ void heatMode() {
 }
 void coolMode() {
   if (txData.currentTemp > txData.setTemp - 3) {
-    setPower(powerON);
-    setTemp(tempLOW);
+    setPower(powerON); 
+    setTemp(tempLOW); 
   }
   else {
     setPower(powerOFF); 
@@ -210,8 +242,21 @@ void receiveWireless() {
     Serial.println(txData.power); 
     Serial.print("Mode: "); 
     Serial.println(txData.mode); 
+
+
+    Serial.println("Data: "); 
+    Serial.print("Current Temp: "); 
+    Serial.println(oldData.currentTemp); 
+    Serial.print("Set Temp: "); 
+    Serial.println(oldData.setTemp);
+    Serial.print("Fan Speed: "); 
+    Serial.println(oldData.fan); 
+    Serial.print("Power: "); 
+    Serial.println(oldData.power); 
+    Serial.print("Mode: "); 
+    Serial.println(oldData.mode); 
     */
   }
-  delay(500); 
+  delay(1000); 
 }
 
